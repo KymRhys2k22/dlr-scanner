@@ -7,7 +7,6 @@ function App() {
   const [open, setOpen] = useState(false);
   const [resultText, setResultText] = useState("");
 
-
   const department = (results) => {
     let department = "";
     switch (results) {
@@ -78,7 +77,6 @@ function App() {
     return department;
   };
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -89,7 +87,7 @@ function App() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const jsonData = await response.json();
-        const res = JSON.stringify(jsonData);
+
         setData(jsonData);
         console.log(jsonData);
       } catch (error) {
@@ -97,58 +95,80 @@ function App() {
       }
     };
 
-
-
-
     fetchData();
   }, []);
 
   useEffect(() => {
-    const found = () => data.filter(item => item.SKU === resultText || item.UPC === resultText).map((items) => {
-      setDataResult(items);
-      setOpen(true)
-    });
+    const found = () =>
+      data
+        .filter((item) => item.SKU === resultText || item.UPC === resultText)
+        .map((items) => {
+          setDataResult(items);
+          setOpen(true);
+        });
 
     found();
-
-
-
-  }, [resultText])
+  }, [resultText]);
 
   return (
-    <div>
-      <BarcodeScanner
-        width={500}
-        height={500}
-        onUpdate={(_err, result) => {
-
-          if (result) {
-            console.log(result.text);
-            setResultText(result.text);
-
-
-
-          }
-        }}
-      />
-      <p>Result: {dataResult ? dataResult.SKU : "No data"}</p>
+    <div className="w-screen h-screen bg-gray-800 py-2 flex flex-col">
+      <div className="mx-auto max-w-2xl flex flex-col justify-center items-center my-8">
+        <button className="cursor-pointer animate-pulse">
+          <div className="flex max-w-48 h-12 px-3 py-4 gap-2 rounded-xl items-center justify-center bg-zinc-500 text-white sm:h-14">
+            <svg viewBox="0 0 16 16" className="w-5 sm:w-7">
+              <path
+                fill="currentColor"
+                d="m10.213 1.471l.691-1.26q.069-.124-.048-.192q-.128-.057-.195.058l-.7 1.27A4.8 4.8 0 0 0 8.005.941q-1.032 0-1.956.404l-.7-1.27Q5.281-.037 5.154.02q-.117.069-.049.193l.691 1.259a4.25 4.25 0 0 0-1.673 1.476A3.7 3.7 0 0 0 3.5 5.02h9q0-1.125-.623-2.072a4.27 4.27 0 0 0-1.664-1.476ZM6.22 3.303a.37.37 0 0 1-.267.11a.35.35 0 0 1-.263-.11a.37.37 0 0 1-.107-.264a.37.37 0 0 1 .107-.265a.35.35 0 0 1 .263-.11q.155 0 .267.11a.36.36 0 0 1 .112.265a.36.36 0 0 1-.112.264m4.101 0a.35.35 0 0 1-.262.11a.37.37 0 0 1-.268-.11a.36.36 0 0 1-.112-.264q0-.154.112-.265a.37.37 0 0 1 .268-.11q.155 0 .262.11a.37.37 0 0 1 .107.265q0 .153-.107.264M3.5 11.77q0 .441.311.75q.311.306.76.307h.758l.01 2.182q0 .414.292.703a.96.96 0 0 0 .7.288a.97.97 0 0 0 .71-.288a.95.95 0 0 0 .292-.703v-2.182h1.343v2.182q0 .414.292.703a.97.97 0 0 0 .71.288a.97.97 0 0 0 .71-.288a.95.95 0 0 0 .292-.703v-2.182h.76q.436 0 .749-.308q.31-.307.311-.75V5.365h-9zm10.495-6.587a.98.98 0 0 0-.702.278a.9.9 0 0 0-.293.685v4.063q0 .406.293.69a.97.97 0 0 0 .702.284q.42 0 .712-.284a.92.92 0 0 0 .293-.69V6.146a.9.9 0 0 0-.293-.685a1 1 0 0 0-.712-.278m-12.702.283a1 1 0 0 1 .712-.283q.41 0 .702.283a.9.9 0 0 1 .293.68v4.063a.93.93 0 0 1-.288.69a.97.97 0 0 1-.707.284a1 1 0 0 1-.712-.284a.92.92 0 0 1-.293-.69V6.146q0-.396.293-.68"></path>
+            </svg>
+            <div>
+              <div className="text-[.5rem] sm:text-xs text-left">Download</div>
+              <div className="text-sm font-semibold font-sans -mt-1 sm:text-xl">
+                Android APK
+              </div>
+            </div>
+          </div>
+        </button>
+        <div className="mt-9">
+          <BarcodeScanner
+            width={400}
+            height={400}
+            onUpdate={(_err, result) => {
+              if (result) {
+                console.log(result.text);
+                setResultText(result.text);
+              }
+            }}
+          />
+        </div>
+        <p className="text-sm text-gray-700 text-center">
+          Result: <strong>{dataResult ? dataResult.SKU : "No data"}</strong>
+        </p>
+      </div>
       {open && (
         <div
-          className={`fixed inset-0 flex items-center justify-center transition-colors ${open ? "visible bg-black/20" : "invisible"
-            }`}
+          className={`fixed inset-0 flex items-center justify-center transition-colors ${
+            open ? "visible bg-black/20" : "invisible"
+          }`}
           onClick={() => setOpen(false)} // Close modal on click
         >
           <div
-            className={`bg-white rounded-xl shadow p-6 transition-all ${open ? "scale-100 opacity-100" : "scale-150 opacity-0"
-              }`}
-          >
-            <p>Item name: {dataResult.SKU || "N/A"}</p>
-            <p>Price: {dataResult.Price || "N/A"}</p>
-            <p>Stock: {dataResult.Description || "N/A"}</p>
-            <p>UPC: {dataResult.UPC || "N/A"}</p>
-            <p>Department: {department(dataResult.Department) || "N/A"}</p>
-            <p>Sub Department: {department(dataResult["Sub Dep"]) || "N/A"}</p>
+            className={`bg-white rounded-xl shadow p-6 transition-all duration-300 flex flex-col gap-1 items-center ${
+              open ? "scale-100 opacity-100" : "scale-150 opacity-0"
+            }`}>
+            <p className="text-sm text-gray-700">Item Description: </p>
+            <strong>{dataResult.Description || "N/A"}</strong>
+            <p className="text-sm text-gray-700">Department: </p>
+            <strong>{department(dataResult.Department) || "N/A"}</strong>
+            <p className="text-sm text-gray-700">SKU:</p>
+            <strong>{dataResult.SKU || "N/A"}</strong>
+            <p className="text-sm text-gray-700">Price:</p>
+            <strong>{dataResult.Price || "N/A"}</strong>
 
+            <p className="text-sm text-gray-700">UPC: </p>
+            <strong>{dataResult.UPC || "N/A"}</strong>
+
+            <p className="text-sm text-gray-700">Sub Department: </p>
+            <strong>{department(dataResult["Sub Dep"]) || "N/A"}</strong>
           </div>
         </div>
       )}
