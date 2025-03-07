@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import BarcodeScanner from "react-qr-barcode-scanner";
-
+import cameraOpen from "./assets/camera-open.svg";
+import cameraClose from "./assets/camera-close.svg";
 function App() {
   const [data, setData] = useState([]);
   const [dataResult, setDataResult] = useState({});
   const [open, setOpen] = useState(false);
   const [resultText, setResultText] = useState("");
+  const [UPC, setUPC] = useState("");
+  const [camera, setCamera] = useState(true);
+  const [cameraImage, setCameraImage] = useState(true);
 
   const department = (results) => {
     let department = "";
@@ -77,6 +81,17 @@ function App() {
     return department;
   };
 
+  const noData = [
+    {
+      Description: "No Data",
+      Department: "No Data",
+      SKU: "No Data",
+      Price: "No Data",
+      UPC: "No Data",
+      "Sub Dep": "No Data",
+    },
+  ];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -102,6 +117,7 @@ function App() {
     const found = () =>
       data
         .filter((item) => item.SKU === resultText || item.UPC === resultText)
+
         .map((items) => {
           setDataResult(items);
           setOpen(true);
@@ -110,9 +126,15 @@ function App() {
     found();
   }, [resultText]);
 
+  const onEnter = (e) => {
+    if (e.key === "Enter") {
+      e.target.blur();
+    }
+  };
+
   return (
-    <div className="w-screen h-screen bg-gray-800 py-2 flex flex-col">
-      <div className="mx-auto max-w-2xl flex flex-col justify-center items-center my-8">
+    <div className="w-screen h-screen bg-zinc-400 py-2 flex flex-col">
+      <div className="mx-auto h-full     w-[350px] flex flex-col justify-center items-center my-8">
         <a
           href="https://drive.google.com/uc?export=download&id=1IW0ufs59LIxuKMtoVn4_fOfXk3uMIuDu"
           className="cursor-pointer animate-pulse">
@@ -133,19 +155,61 @@ function App() {
           </div>
         </a>
         <div className="mt-9">
-          <BarcodeScanner
-            width={400}
-            height={400}
-            onUpdate={(_err, result) => {
-              if (result) {
-                setResultText(result.text);
-              }
+          {camera && (
+            <BarcodeScanner
+              width={400}
+              height={400}
+              onUpdate={(_err, result) => {
+                if (result) {
+                  setResultText(result.text);
+                }
+              }}
+            />
+          )}
+        </div>
+
+        <input
+          onKeyUp={onEnter}
+          className=" w-full h-10 px-3 py-2 mt-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          value={UPC}
+          onSubmit={(e) => {
+            setDataResult(UPC);
+            e.preventDefault();
+          }}
+          onChange={(e) => setUPC(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              setResultText(UPC);
+            }
+          }}
+          type="text"
+          inputMode="numeric"
+          maxLength="12"
+          placeholder="SKU or UPC"
+          pattern="[0-9]*"
+        />
+        {/* Camera Button */}
+        {cameraImage ? (
+          <img
+            src={cameraOpen}
+            alt="camera"
+            className="w-10 h-10 mt-4 cursor-pointer text-zinc-50"
+            onClick={() => {
+              setCamera(!camera);
+              setCameraImage(!cameraImage);
             }}
           />
-        </div>
-        <p className="text-sm text-gray-700 text-center">
-          Result: <strong>{dataResult ? dataResult.SKU : "No data"}</strong>
-        </p>
+        ) : (
+          <img
+            src={cameraClose}
+            alt="camera"
+            className="w-10 h-10 mt-4 cursor-pointer fill-white"
+            onClick={() => {
+              setCamera(!camera);
+              setCameraImage(!cameraImage);
+            }}
+          />
+        )}
       </div>
       {open && (
         <div
@@ -158,20 +222,34 @@ function App() {
             className={`bg-white rounded-xl shadow p-6 transition-all duration-300 flex flex-col gap-1 items-center ${
               open ? "scale-100 opacity-100" : "scale-150 opacity-0"
             }`}>
-            <p className="text-sm text-gray-700">Item Description: </p>
-            <strong>{dataResult.Description || "N/A"}</strong>
+            <p className="text-sm  text-gray-700">Item Description: </p>
+            <a
+              className="text-blue-500 underline"
+              href={`https://www.google.com/search?tbm=isch&q=${dataResult.Description}`}
+              target="_blank">
+              <strong>{dataResult.Description || "No Data"}</strong>
+            </a>
             <p className="text-sm text-gray-700">Department: </p>
-            <strong>{department(dataResult.Department) || "N/A"}</strong>
+            <strong>{department(dataResult.Department) || "No Data"}</strong>
             <p className="text-sm text-gray-700">SKU:</p>
-            <strong>{dataResult.SKU || "N/A"}</strong>
+            <a
+              className="text-blue-500 underline"
+              href={`https://www.google.com/search?tbm=isch&q=${dataResult.SKU}`}
+              target="_blank">
+              <strong>{dataResult.SKU || "No Data"}</strong>
+            </a>
             <p className="text-sm text-gray-700">Price:</p>
-            <strong>{dataResult.Price || "N/A"}</strong>
+            <strong>{dataResult.Price || "No Data"}</strong>
 
             <p className="text-sm text-gray-700">UPC: </p>
-            <strong>{dataResult.UPC || "N/A"}</strong>
-
+            <a
+              className="text-blue-500 underline"
+              href={`https://www.google.com/search?tbm=isch&q=${dataResult.UPC}`}
+              target="_blank">
+              <strong>{dataResult.UPC || "No Data"}</strong>
+            </a>
             <p className="text-sm text-gray-700">Sub Department: </p>
-            <strong>{department(dataResult["Sub Dep"]) || "N/A"}</strong>
+            <strong>{department(dataResult["Sub Dep"]) || "No Data"}</strong>
           </div>
         </div>
       )}
