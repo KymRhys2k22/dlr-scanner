@@ -81,22 +81,11 @@ function App() {
     return department;
   };
 
-  const noData = [
-    {
-      Description: "No Data",
-      Department: "No Data",
-      SKU: "No Data",
-      Price: "No Data",
-      UPC: "No Data",
-      "Sub Dep": "No Data",
-    },
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://raw.githubusercontent.com/KymRhys2k22/drl-scanner/refs/heads/main/src/item.json"
+          "https://raw.githubusercontent.com/KymRhys2k22/drl-scanner/refs/heads/main/src/itemss.json"
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -142,11 +131,25 @@ function App() {
             <svg viewBox="0 0 16 16" className="w-5 sm:w-7">
               <path
                 fill="currentColor"
-                d="m10.213 1.471l.691-1.26q.069-.124-.048-.192q-.128-.057-.195.058l-.7 1.27A4.8 4.8 0 0 0 8.005.941q-1.032 0-1.956.404l-.7-1.27Q5.281-.037 5.154.02q-.117.069-.049.193l.691 1.259a4.25 4.25 0 0 0-1.673 1.476A3.7 3.7 0 0 0 3.5 5.02h9q0-1.125-.623-2.072a4.27 4.27 0 0 0-1.664-1.476ZM6.22 3.303a.37.37 0 0 1-.267.11a.35.35 0 0 1-.263-.11a.37.37 0 0 1-.107-.264a.37.37 0 0 1 .107-.265a.35.35 0 0 1 .263-.11q.155 0 .267.11a.36.36 0 0 1 .112.265a.36.36 0 0 1-.112.264m4.101 0a.35.35 0 0 1-.262.11a.37.37 0 0 1-.268-.11a.36.36 0 0 1-.112-.264q0-.154.112-.265a.37.37 0 0 1 .268-.11q.155 0 .262.11a.37.37 0 0 1 .107.265q0 .153-.107.264M3.5 11.77q0 .441.311.75q.311.306.76.307h.758l.01 2.182q0 .414.292.703a.96.96 0 0 0 .7.288a.97.97 0 0 0 .71-.288a.95.95 0 0 0 .292-.703v-2.182h1.343v2.182q0 .414.292.703a.97.97 0 0 0 .71.288a.97.97 0 0 0 .71-.288a.95.95 0 0 0 .292-.703v-2.182h.76q.436 0 .749-.308q.31-.307.311-.75V5.365h-9zm10.495-6.587a.98.98 0 0 0-.702.278a.9.9 0 0 0-.293.685v4.063q0 .406.293.69a.97.97 0 0 0 .702.284q.42 0 .712-.284a.92.92 0 0 0 .293-.69V6.146a.9.9 0 0 0-.293-.685a1 1 0 0 0-.712-.278m-12.702.283a1 1 0 0 1 .712-.283q.41 0 .702.283a.9.9 0 0 1 .293.68v4.063a.93.93 0 0 1-.288.69a.97.97 0 0 1-.707.284a1 1 0 0 1-.712-.284a.92.92 0 0 1-.293-.69V6.146q0-.396.293-.68"></path>
+                d="m10.213 
+                1.471l.691-1.26q.069-.124-.048-.192q-.128-.057-.195.058l-.7
+                1.27A4.8 4.8 0 0 0 8.005.941q-1.032 0-1.956.404l-.7-1.27Q5.281-.037
+                5.154.02q-.117.069-.049.193l.691 1.259a4.25 4.25 0 0 0-1.673
+                1.476A3.7 3.7 0 0 0 3.5 5.02h9q0-1.125-.623-2.072a4.27 4.27 0 0
+                0-1.664-1.476ZM6.22 3.303a.37.37 0 0 1-.267.11a.35.35 0 0 1-.263-.11a.37.37
+                0 0 1-.107-.264a.37.37 0 0 1 .107-.265a.35.35 0 0 1 .263-.11q.155 0 .267.11a.36.36
+                0 0 1 .112.265a.36.36 0 0 1-.112.264m4.101 0a.35.35 0 0 1-.262.11a.37.37 0 0 1-.268-.11a.36.36
+                0 0 1-.112-.264q0-.154.112-.265a.37.37 0 0 1 .268-.11q.155 0 .262.11a.37.37 0 0 1 .107.265q0 .153-.107.264M3.5
+                11.77q0 .441.311.75q.311.306.76.307h.758l.01 2.182q0 .414.292.703a.96.96 0 0 0 .7.288a.97.97 0 0 0 .71-.288a.95.95 
+                0 0 0 .292-.703v-2.182h1.343v2.182q0 .414.292.703a.97.97 0 0 0 .71.288a.97.97 0 0 0
+                .71-.288a.95.95 0 0 0 .292-.703v-2.182h.76q.436 0 .749-.308q.31-.307.311-.75V5.365h-9zm10.495-6.587a.98.98
+                0 0 0-.702.278a.9.9 0 0 0-.293.685v4.063q0 .406.293.69a.97.97 0 0 0 .702.284q.42 0 .712-.284a.92.92 0 0 0
+                .293-.69V6.146a.9.9 0 0 0-.293-.685a1 1 0 0 0-.712-.278m-12.702.283a1 1 0 0 1 .712-.283q.41 0 .702.283a.9.9
+                0 0 1 .293.68v4.063a.93.93 0 0 1-.288.69a.97.97 0 0 1-.707.284a1 1 0 0 1-.712-.284a.92.92 0 0 1-.293-.69V6.146q0-.396.293-.68"></path>
             </svg>
             <div>
               <div className="text-[.5rem] sm:text-xs text-left">
-                Download <i className="text-yellow-300">new</i> 3.0.0
+                Download <i className="text-yellow-300">new</i> 3.0.1
               </div>
               <div className="text-sm font-semibold font-sans -mt-1 sm:text-xl">
                 Android APK
@@ -184,7 +187,7 @@ function App() {
           }}
           type="text"
           inputMode="numeric"
-          maxLength="12"
+          maxLength="13"
           placeholder="SKU or UPC"
           pattern="[0-9]*"
         />
@@ -216,7 +219,9 @@ function App() {
           className={`fixed inset-0 flex items-center justify-center transition-colors ${
             open ? "visible bg-black/20" : "invisible"
           }`}
-          onClick={() => setOpen(false)} // Close modal on click
+          onClick={() => {
+            setOpen(false), setUPC("");
+          }} // Close modal on click
         >
           <div
             className={`bg-white rounded-xl shadow p-6 transition-all duration-300 flex flex-col gap-1 items-center ${
